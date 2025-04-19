@@ -1,0 +1,20 @@
+# Archivos sensibles
+.env
+credentials.json
+client_secrets.json
+ids_procesados.json
+settings.yaml
+token.json
+ids_procesados.json
+
+# Carpeta donde guardas los adjuntos descargados
+adjuntos_guardados/
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Archivos generados por editores
+.vscode/
+.idea/
