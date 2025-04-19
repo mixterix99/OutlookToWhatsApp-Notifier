@@ -24,10 +24,10 @@ else:
 # ========== CONFIGURACIÓN ==========
 remitente_diana = "diegopolo14@gmail.com"
 
-account_sid = 'AC938e94b268c155fec552628f4568790c'
-auth_token = '12ad10889ddc2396b523ca4cb3ee2d4a'
-numero_twilio = 'whatsapp:+14155238886'
-numero_destino = 'whatsapp:+573118926101'  # Cambia al tuyo validado
+account_sid = os.getenv("TWILIO_SID")
+auth_token = os.getenv("TWILIO_TOKEN")
+numero_twilio = os.getenv("WHATSAPP_FROM")
+numero_destino = os.getenv("WHATSAPP_TO")  # Cambia al tuyo validado
 
 # ========== OUTLOOK ==========
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
