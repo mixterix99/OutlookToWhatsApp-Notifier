@@ -36,7 +36,7 @@ for i in range(outlook.Folders.Count):
     print(f"{i + 1}: {outlook.Folders.Item(i + 1).Name}")
 
 buzon = outlook.Folders.Item(1)
-inbox = buzon.Folders["Bandeja de entrada"]
+inbox = buzon.Folders["Inbox"]
 mensajes = inbox.Items
 mensajes.Sort("[ReceivedTime]", True)
 

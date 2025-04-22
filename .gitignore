@@ -6,6 +6,7 @@ ids_procesados.json
 settings.yaml
 token.json
 ids_procesados.json
+env
 
 # Carpeta donde guardas los adjuntos descargados
 adjuntos_guardados/
@@ -18,3 +19,4 @@ __pycache__/
 # Archivos generados por editores
 .vscode/
 .idea/
+venv/
