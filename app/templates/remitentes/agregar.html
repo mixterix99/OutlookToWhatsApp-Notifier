@@ -1,0 +1,26 @@
+<h2>➕ Agregar nuevo remitente</h2>
+<a href="{{ url_for('remitentes.lista_remitentes') }}">⬅️ Volver a la lista</a>
+<form method="post">
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label>Nombre:</label><br>
+    <input type="text" name="nombre" required><br><br>
+
+    <label>
+        <input type="checkbox" name="activo" checked>
+        ¿Activo?
+    </label><br><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+    {% for msg in messages %}
+      <li>{{ msg }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}

@@ -1,0 +1,19 @@
+<h2>📲 Destinatarios registrados</h2>
+<a href="{{ url_for('main.panel') }}">⬅️ Volver al panel</a>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Número</th>
+        <th>Nombre</th>
+        <th>Remitente</th>
+    </tr>
+    {% for d in destinatarios %}
+    <tr>
+        <td>{{ d.id }}</td>
+        <td>{{ d.numero }}</td>
+        <td>{{ d.nombre }}</td>
+        <td>{{ d.email }}</td>
+    </tr>
+    {% endfor %}
+</table>
