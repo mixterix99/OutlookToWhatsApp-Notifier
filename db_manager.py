@@ -1,59 +1,57 @@
-import sqlite3
-import os
-
-os.makedirs(os.path.join("app","instance"),exist_ok=True)
-
-DB_PATH = os.path.join("instance", "notificador.db")
-
-
-def conectar():
-    return sqlite3.connect(DB_PATH)
+from app import db
+from app.models import Remitente, Destinatario
+from sqlalchemy.exc import SQLAlchemyError
 
 # ---------- REMITENTES ----------
 
-def agregar_remitente(email, nombre, activo):
-    conn = conectar()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO remitentes (email, nombre, activo) VALUES (?, ?, ?)",
-                   (email, nombre, activo))
-    conn.commit()
-    conn.close()
-
+def agregar_remitente(email, nombre, activo, tipo):
+    try:
+        nuevo = Remitente(email=email, nombre=nombre, activo=bool(activo), tipo=tipo)
+        db.session.add(nuevo)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        raise e
 
 def listar_remitentes():
-    conn = conectar()
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, email, activo FROM remitentes WHERE activo = 1")
-    datos = cursor.fetchall()
-    conn.close()
-    return datos
+    return Remitente.query.filter_by(activo=True).all()
+
+def obtener_remitente(id_remitente):
+    return Remitente.query.get(id_remitente)
+
+def editar_remitente(id_remitente, email, nombre, activo, tipo):
+    remitente = Remitente.query.get(id_remitente)
+    if remitente:
+        remitente.email = email
+        remitente.nombre = nombre
+        remitente.activo = bool(activo)
+        remitente.tipo = tipo
+        db.session.commit()
+
+def eliminar_remitente(id_remitente):
+    remitente = Remitente.query.get(id_remitente)
+    if remitente:
+        db.session.delete(remitente)
+        db.session.commit()
 
 # ---------- DESTINATARIOS ----------
 
-def agregar_destinatario(id_remitente, numero, nombre=None):
-    conn = conectar()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO destinatarios (id_remitente, numero, nombre) VALUES (?, ?, ?)", (id_remitente, numero, nombre))
-    conn.commit()
-    conn.close()
-    print(f"📱 Destinatario agregado para remitente {id_remitente}: {numero}")
+def agregar_destinatario(numero, nombre, remitente_ids):
+    try:
+        nuevo = Destinatario(numero=numero, nombre=nombre)
+        for id_rem in remitente_ids:
+            remitente = Remitente.query.get(id_rem)
+            if remitente:
+                nuevo.remitentes.append(remitente)
+        db.session.add(nuevo)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        raise e
 
 def listar_destinatarios():
-    conn = conectar()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT d.id, d.numero, d.nombre, r.email
-        FROM destinatarios d
-        JOIN remitentes r ON d.id_remitente = r.id
-    """)
-    datos = cursor.fetchall()
-    conn.close()
-    return datos
+    return Destinatario.query.all()
 
 def listar_destinatarios_por_remitente(id_remitente):
-    conn = conectar()
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, numero, nombre FROM destinatarios WHERE id_remitente = ?", (id_remitente,))
-    datos = cursor.fetchall()
-    conn.close()
-    return datos
+    remitente = Remitente.query.get(id_remitente)
+    return remitente.destinatarios if remitente else []

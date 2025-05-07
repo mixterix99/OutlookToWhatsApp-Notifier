@@ -1,4 +1,4 @@
-from db_manager import agregar_remitente, agregar_destinatario, listar_remitentes
+from db_managerOLD import agregar_remitente, agregar_destinatario, listar_remitentes
 
 # 👉 Agrega un remitente (correo desde el que recibes correos importantes)
 agregar_remitente("diegopolo14@gmail.com", "Correo de prueba")

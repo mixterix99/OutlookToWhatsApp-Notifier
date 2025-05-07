@@ -1,26 +1,46 @@
 from . import db
 from flask_login import UserMixin
 
+# Tabla intermedia para relación many-to-many
+remitente_destinatario = db.Table('remitente_destinatario',
+    db.Column('id_remitente', db.Integer, db.ForeignKey('remitentes.id'), primary_key=True),
+    db.Column('id_destinatario', db.Integer, db.ForeignKey('destinatarios.id'), primary_key=True)
+)
+
+class Remitente(db.Model):
+    __tablename__ = 'remitentes'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), nullable=False)
+    nombre = db.Column(db.String(255), nullable=True)
+    activo = db.Column(db.Boolean, default=True)
+    tipo = db.Column(db.String(50), nullable=False)  # puede ser 'correo' o 'dominio'
+
+    destinatarios = db.relationship(
+        'Destinatario',
+        secondary=remitente_destinatario,
+        back_populates='remitentes'
+    )
+
+class Destinatario(db.Model):
+    __tablename__ = 'destinatarios'
+    id = db.Column(db.Integer, primary_key=True)
+    numero = db.Column(db.String(20), nullable=False)
+    correo = db.Column(db.String(255), nullable=True)  # ← NUEVO
+    nombre = db.Column(db.String(255), nullable=True)
+
+    remitentes = db.relationship(
+        'Remitente',
+        secondary=remitente_destinatario,
+        back_populates='destinatarios'
+    )
+
 class Usuario(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
-    
-class Remitentes(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    nombre = db.Column(db.String(255), nullable=True)
-    activo = db.Column(db.Boolean, default=True)
 
-    destinatarios = db.relationship('Destinatarios', backref='remitentes', cascade="all, delete-orphan")
-
-class Destinatarios(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    numero = db.Column(db.String(20), nullable=False)
-    nombre = db.Column(db.String(255), nullable=True)
-    id_remitente = db.Column(db.Integer, db.ForeignKey('remitentes.id'), nullable=False)
-
-class Notificaciones(db.Model):
+class Notificacion(db.Model):
+    __tablename__ = 'notificaciones'
     id = db.Column(db.Integer, primary_key=True)
     id_remitente = db.Column(db.Integer, db.ForeignKey('remitentes.id'), nullable=False)
     id_destinatario = db.Column(db.Integer, db.ForeignKey('destinatarios.id'), nullable=False)

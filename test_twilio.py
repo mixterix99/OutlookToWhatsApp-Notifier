@@ -6,7 +6,7 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from dotenv import load_dotenv
 
-from db_manager import listar_remitentes, listar_destinatarios_por_remitente
+from db_managerOLD import listar_remitentes, listar_destinatarios_por_remitente
 
 # ========== CARGAR VARIABLES DE ENTORNO ==========
 load_dotenv()

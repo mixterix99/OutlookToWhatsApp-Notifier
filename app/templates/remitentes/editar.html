@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Remitente</title>
+</head>
+<body>
+    <h1>✏️ Editar Remitente</h1>
+    <form method="POST">
+        <label>Correo/Dominio:</label><br>
+        <input type="text" name="email" value="{{ remitente.email }}" required><br><br>
+
+        <label>Nombre (opcional):</label><br>
+        <input type="text" name="nombre" value="{{ remitente.nombre }}"><br><br>
+
+        <label>Tipo:</label><br>
+        <select name="tipo">
+            <option value="correo" {% if remitente.tipo == 'correo' %}selected{% endif %}>Correo exacto</option>
+            <option value="dominio" {% if remitente.tipo == 'dominio' %}selected{% endif %}>Dominio</option>
+        </select><br><br>
+
+        <label>Activo:</label>
+        <input type="checkbox" name="activo" {% if remitente.activo %}checked{% endif %}><br><br>
+
+        <button type="submit">Guardar cambios</button>
+        <a href="{{ url_for('remitentes.lista_remitentes') }}">Cancelar</a>
+    </form>
+</body>
+</html>

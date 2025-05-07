@@ -8,18 +8,30 @@
     <h1>📬 Remitentes registrados</h1>
     <a href="{{ url_for('main.panel') }}">🔙 Volver al panel</a>
     <a href="{{ url_for('remitentes.agregar_remitente') }}">➕ Agregar nuevo remitente</a>
+     
     <table border="1" cellpadding="10">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Correo</th>
+                <th>Nombre</th>
+                <th>Correo/Dominio</th>
+                <th>Tipo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for remitente in remitentes %}
                 <tr>
                     <td>{{ remitente.id }}</td>
+                    <td>{{ remitente.nombre }}</td>
                     <td>{{ remitente.email }}</td>
+                    <td>{{ remitente.tipo }}</td>
+                    <td>
+                        <a href="{{ url_for('remitentes.editar_remitente', id=remitente.id) }}">✏️ Editar</a>
+                        <form action="{{ url_for('remitentes.eliminar_remitente_route', id=remitente.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar este remitente?');">
+                            <button type="submit">🗑️ Eliminar</button>
+                        </form>
+                    </td>   
                 </tr>
             {% endfor %}
         </tbody>
