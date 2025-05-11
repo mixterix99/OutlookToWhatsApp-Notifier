@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Destinatario</title>
+</head>
+<body>
+    <h1>✏️ Editar Destinatario</h1>
+    <form method="POST">
+        <label>Número:</label><br>
+        <input type="text" name="numero" value="{{ destinatario.numero }}" required><br><br>
+
+        <label>Nombre (opcional):</label><br>
+        <input type="text" name="nombre" value="{{ destinatario.nombre }}"><br><br>
+
+        <label>Correo (opcional):</label><br>
+        <input type="email" name="correo" value="{{ destinatario.correo }}"><br><br>
+
+        <label>Remitentes asociados:</label><br>
+        {% for remitente in remitentes %}
+            <input type="checkbox" name="remitentes" value="{{ remitente.id }}"
+                {% if remitente in destinatario.remitentes %}checked{% endif %}>
+            {{ remitente.nombre or remitente.email }}<br>
+        {% endfor %}
+
+        <br>
+        <button type="submit">Guardar cambios</button>
+        <a href="{{ url_for('destinatarios.lista_destinatarios') }}">Cancelar</a>
+    </form>
+</body>
+</html>

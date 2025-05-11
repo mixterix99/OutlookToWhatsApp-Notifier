@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required
-from app.models import Usuario
+from app.models import Usuario, db, Log
+from datetime import datetime
 from app import login_manager
 
 main = Blueprint('main', __name__)
@@ -20,13 +21,14 @@ def login():
         if user and user.password == request.form['password']:
             login_user(user)
             return redirect(url_for('main.panel'))
-        flash('Credenciales inválidas')
+        flash("Usuario o contraseña incorrectos", category="login")
     return render_template('login.html')
 
 @main.route('/panel')
 @login_required
 def panel():
-    return render_template('panel.html')
+    logs = Log.query.order_by(Log.fecha.desc()).limit(10).all()
+    return render_template('panel.html', logs=logs)
 
 @main.route('/logout')
 @login_required

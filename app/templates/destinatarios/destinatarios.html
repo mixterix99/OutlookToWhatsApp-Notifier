@@ -1,41 +1,39 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Destinatarios</title>
-</head>
-<body>
-    <h1>📲 Destinatarios registrados</h1>
-    
-    <a href="{{ url_for('main.panel') }}">🔙 Volver al panel</a>
-    <a href="{{ url_for('destinatarios.agregar_destinatario') }}">➕ Agregar nuevo destinatario</a>
+<h2>📲 Destinatarios registrados</h2>
+<a href="{{ url_for('main.panel') }}">⬅️ Volver al panel</a>
+<a href="{{ url_for('destinatarios.agregar_destinatario') }}">➕ Agregar nuevo destinatario</a>
 
-    <table border="1" cellpadding="10">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Número</th>
-                <th>Nombre</th>
-                <th>Remitente</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for d in destinatarios %}
-            <tr>
-                <td>{{ d.id }}</td>
-                <td>{{ d.numero }}</td>
-                <td>{{ d.nombre if d.nombre else '—' }}</td>
-                <td>{{ d.email }}</td>
-                <td>
-                    <a href="{{ url_for('destinatarios.editar_destinatario', id=d.id) }}">✏️ Editar</a>
-                    <form action="{{ url_for('destinatarios.eliminar_destinatario', id=d.id) }}" method="POST" style="display:inline;">
-                        <button type="submit">🗑️ Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Remitentes asociados</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in destinatarios %}
+        <tr>
+            <td>{{ d.id }}</td>
+            <td>{{ d.nombre }}</td>
+            <td>{{ d.numero }}</td>
+            <td>{{ d.correo }}</td>
+            <td>
+                <ul>
+                    {% for r in d.remitentes %}
+                        <li>{{ r.nombre }} ({{ r.email }})</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <a href="{{ url_for('destinatarios.editar_destinatario', id=d.id) }}">✏️ Editar</a>
+                <form action="{{ url_for('destinatarios.eliminar_destinatario', id=d.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar este destinatario?');">
+                    <button type="submit">🗑️ Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

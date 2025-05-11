@@ -19,7 +19,7 @@ def listar_remitentes():
 def obtener_remitente(id_remitente):
     return Remitente.query.get(id_remitente)
 
-def editar_remitente(id_remitente, email, nombre, activo, tipo):
+def actualizar_remitente(id_remitente, email, nombre, activo, tipo):
     remitente = Remitente.query.get(id_remitente)
     if remitente:
         remitente.email = email

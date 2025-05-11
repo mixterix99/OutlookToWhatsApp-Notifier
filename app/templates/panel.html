@@ -9,3 +9,11 @@
 
 <br>
 <a href="{{ url_for('main.logout') }}">Cerrar sesión</a>
+
+<hr>
+<h2>📋 Últimas acciones realizadas</h2>
+<ul>
+  {% for log in logs %}
+    <li>{{ log.fecha }} - {{ log.usuario }} - {{ log.accion }}</li>
+  {% endfor %}
+</ul>

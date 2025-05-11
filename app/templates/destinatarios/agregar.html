@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agregar destinatario</title>
+</head>
+<body>
+  <h2>➕ Agregar nuevo destinatario</h2>
+  <a href="{{ url_for('destinatarios.lista_destinatarios') }}">⬅️ Volver a la lista</a>
+
+  <form method="post">
+    <label>Número de WhatsApp:</label><br>
+    <input type="text" name="numero" required><br><br>
+
+    <label>Nombre (opcional):</label><br>
+    <input type="text" name="nombre"><br><br>
+
+    <label>Correo electrónico (opcional):</label><br>
+    <input type="email" name="correo"><br><br>
+
+    <label>Asociar a remitentes:</label><br>
+    {% for remitente in remitentes %}
+      <input type="checkbox" name="remitentes" value="{{ remitente.id }}"> {{ remitente.nombre or remitente.email }}<br>
+    {% endfor %}
+
+    <br>
+    <button type="submit">Guardar</button>
+  </form>
+
+  {% with messages = get_flashed_messages(category_filter=["destinatario"]) %}
+    {% if messages %}
+      <ul>
+      {% for msg in messages %}
+        <li style="color: green;">✅ {{ msg }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+</body>
+</html>

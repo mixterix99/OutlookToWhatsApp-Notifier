@@ -5,15 +5,16 @@ from db_managerOLD import agregar_remitente
 from flask import request, redirect, url_for, flash
 from db_managerOLD import conectar
 from db_managerOLD import obtener_remitente, editar_remitente, eliminar_remitente
+from  app.models  import Remitente
+from db_manager import actualizar_remitente
 
 remitentes_bp = Blueprint('remitentes', __name__, url_prefix="/remitentes")
 
 @remitentes_bp.route("/")
 @login_required
 def lista_remitentes():
-    datos = listar_remitentes()
-    print("Remitentes encontrados:", datos)
-    return render_template("remitentes/remitentes.html", remitentes=datos)
+    remitentes =  Remitente.query.filter_by(activo=True).all()
+    return render_template("remitentes/remitentes.html", remitentes=remitentes)
 
 @remitentes_bp.route("/agregar", methods=["GET", "POST"])
 @login_required
@@ -49,7 +50,7 @@ def editar_remitente(id):
         nombre = request.form["nombre"]
         activo = 1 if request.form.get("activo") == "on" else 0
         tipo = request.form["tipo"]
-        editar_remitente(id, email, nombre, activo, tipo)
+        actualizar_remitente(id, email, nombre, activo, tipo)
         flash("Remitente actualizado.")
         return redirect(url_for("remitentes.lista_remitentes"))
 
