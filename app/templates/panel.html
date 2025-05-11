@@ -14,6 +14,10 @@
 <h2>📋 Últimas acciones realizadas</h2>
 <ul>
   {% for log in logs %}
-    <li>{{ log.fecha }} - {{ log.usuario }} - {{ log.accion }}</li>
+    <li>
+      📅 {{ log.fecha.strftime('%Y-%m-%d %H:%M:%S') }} — 
+      👤 <strong>{{ log.usuario.username }}</strong> — 
+      📝 {{ log.accion|capitalize }} {{ log.entidad }}: {{ log.detalle }}
+    </li>
   {% endfor %}
 </ul>
