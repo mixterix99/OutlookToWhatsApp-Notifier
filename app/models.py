@@ -1,4 +1,4 @@
-from . import db
+from app.extensiones import db
 from flask_login import UserMixin
 from datetime import datetime
 
@@ -49,6 +49,11 @@ class Notificacion(db.Model):
     asunto = db.Column(db.String(255))
     fecha = db.Column(db.String(50))
     mensaje = db.Column(db.Text)
+    remitente = db.relationship('Remitente', backref='notificaciones')
+    destinatario = db.relationship('Destinatario', backref='notificaciones')
+    archivo_url = db.Column(db.String(255), nullable=True)  # Para adjuntos
+    estado = db.Column(db.String(50), default="Enviado")  
+
 
 class Log(db.Model):
     __tablename__ = 'logs'

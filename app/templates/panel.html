@@ -1,10 +1,17 @@
 <!-- templates/panel.html -->
 <h1>Bienvenido al panel</h1>
 
+{% if servicio_activo %}
+  <p style="color: green;">🟢 Servicio activo</p>
+{% else %}
+  <p style="color: red;">🔴 Servicio detenido</p>
+{% endif %}
+
+
 <ul>
   <li><a href="{{ url_for('remitentes.lista_remitentes') }}">📧 Ver remitentes registrados</a></li>
   <li><a href="{{ url_for('destinatarios.lista_destinatarios') }}">📲 Ver Destinatarios</a><br></li>
-  <li><a href="#">📜 Historial de notificaciones</a> <!-- pronto con url real --></li>
+  <li><a href="{{url_for('notificaciones.notificaciones')}}">📜 Historial de notificaciones</a> <!-- pronto con url real --></li>
 </ul>
 
 <br>

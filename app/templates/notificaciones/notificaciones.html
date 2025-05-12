@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificaciones enviadas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Historial de Notificaciones</h1>
+
+    <form method="GET" action="{{ url_for('notificaciones.notificaciones') }}">
+        <label for="fecha">Filtrar por fecha:</label>
+        <input type="date" name="fecha" id="fecha" value="{{ request.args.get('fecha', '') }}">
+        
+        <label for="remitente">Remitente:</label>
+        <input type="text" name="remitente" id="remitente" placeholder="correo@ejemplo.com" value="{{ request.args.get('remitente', '') }}">
+        
+        <label for="destinatario">Destinatario:</label>
+        <input type="text" name="destinatario" id="destinatario" placeholder="número WhatsApp o nombre" value="{{ request.args.get('destinatario', '') }}">
+        
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Remitente</th>
+                <th>Destinatario</th>
+                <th>Asunto</th>
+                <th>Archivo adjunto</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for n in notificaciones %}
+                <tr>
+                    <td>{{ n.fecha }}</td>
+                    <td>{{ n.remitente.nombre }}</td>
+                    <td>{{ n.destinatario.nombre }}</td>
+                    <td>{{ n.asunto }}</td>
+                    <td>
+                    {% if n.archivo_url %}
+                        <a href="{{ n.archivo_url }}" target="_blank">Ver adjunto</a>
+                    {% else %}
+                        No adjunto
+                    {% endif %}
+                    </td>
+                    <td>
+                    {{ n.estado if n.estado else 'No definido' }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">No se encontraron notificaciones con los filtros seleccionados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
